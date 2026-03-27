@@ -4,6 +4,7 @@ using System.Data.SqlClient;
 using System.Collections.Generic;
 using System.ComponentModel;
 using Microsoft.VisualBasic;
+using System.Data.Common;
 
 class Program
 {
@@ -13,6 +14,11 @@ class Program
         {
             try
             {
+
+               
+
+
+
                 Console.WriteLine($"Iniciando verificação: {DateTime.Now}");
 
                 await ExecutarRotinaAsync();
@@ -47,21 +53,28 @@ class Program
     Console.WriteLine($"ExternalId: {p.ExternalId}");
     Console.WriteLine($"PayerNumber: {p.PayerNumber}");
    }
+    }
+
+   static List<Pendencia> BuscarPendencias()
+ {
+    var lista = new List<Pendencia>();
+  
+  
+    string connectionString =  "Server=localhost,1433;Database=AutomacaoPendencias;User Id=sa;Password=SuaSenhaForte123!;TrustServerCertificate=True;";
+    string query =  "SELECT ExternalId, PayerNumber FROM Pendencias WHERE Status = 'PENDENTE'";
+
+     using (SqlConnection conn = new SqlConnection(connectionString))
+        {
+            conn.Open();
+
+            using SqlCommand command =  new SqlCommand(query, conn);   
+        }
+         
+    return lista;
+ }
  
     
-}
-
-
-static List<Pendencia> BuscarPendencias()
-{
-    var lista = new List<Pendencia>
-        {
-            new Pendencia {ExternalId = "123",  PayerNumber = "999"},
-            new Pendencia {ExternalId = "456",  PayerNumber = "888"}
-        };
 
 
 
-    return lista ;
-}
 }
